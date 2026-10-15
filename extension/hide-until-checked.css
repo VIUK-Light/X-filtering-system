@@ -1,0 +1,16 @@
+html:not([data-xfilter-revealed="true"]) body {
+  opacity: 0 !important;
+}
+
+html:not([data-xfilter-revealed="true"])::after {
+  content: "SafeSearch 4 is checking this page";
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 2rem !important;
+  background: #f8fafc !important;
+  color: #172033 !important;
+  font: 600 16px/1.5 system-ui, sans-serif !important;
+}

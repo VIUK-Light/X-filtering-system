@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SafeSearch 4 — ページをブロックしました</title>
+    <link rel="stylesheet" href="blocked.css">
+    <script src="blocked-page.js" defer></script>
+  </head>
+  <body>
+    <main class="card" aria-live="polite">
+      <div class="mark" aria-hidden="true">!</div>
+      <p class="eyebrow">SafeSearch 4 · X-filtering system</p>
+      <h1 id="heading">このページを表示できません</h1>
+      <p id="summary" class="summary">保護ルールによりページを止めました。</p>
+      <dl class="details">
+        <div>
+          <dt>判定</dt>
+          <dd id="decision">ブロック</dd>
+        </div>
+        <div id="category-row" hidden>
+          <dt>カテゴリ</dt>
+          <dd id="category"></dd>
+        </div>
+        <div>
+          <dt>理由</dt>
+          <dd id="reason"></dd>
+        </div>
+        <div id="uncertainty-row" hidden>
+          <dt>確認状況</dt>
+          <dd id="uncertainty"></dd>
+        </div>
+      </dl>
+      <p class="footer">本文判定はこの端末内で行われます。</p>
+      <button id="back-button" type="button">前のページに戻る</button>
+    </main>
+  </body>
+</html>

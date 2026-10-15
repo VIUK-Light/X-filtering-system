@@ -1,0 +1,24 @@
+{
+  "name": "x-filtering-system",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "SafeSearch 4 local filtering core and Microsoft Edge Manifest V3 extension",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:model-poc": "node scripts/build-model-poc.mjs",
+    "package:edge": "npm run build && node scripts/package-edge.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test src/shared/filter-core.test.ts src/extension/dnr-rules.test.ts"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.0",
+    "@types/node": "^22.0.0",
+    "@types/yazl": "^3.3.0",
+    "esbuild": "^0.25.0",
+    "onnxruntime-web": "1.30.0",
+    "typescript": "^5.7.0",
+    "yazl": "^3.3.1"
+  }
+}

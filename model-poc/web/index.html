@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>X-filtering · ONNX Runtime Web probe</title>
+    <link rel="stylesheet" href="bench.css">
+    <script src="bench.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">SafeSearch 4 · X-filtering system</p>
+        <h1>ONNX Runtime Web probe</h1>
+        <p>ローカルのONNXファイルと、Mac側で生成した同一入力テンソルを比較します。</p>
+      </header>
+      <section class="panel inputs">
+        <label>ONNX encoder file<input id="model-file" type="file" accept=".onnx,application/octet-stream"></label>
+        <label>Tensor fixture<input id="fixture-file" type="file" accept=".json,application/json"></label>
+        <p class="hint">モデルと入力ファイルはブラウザー内で読み込みます。サーバーへアップロードしません。</p>
+      </section>
+      <section class="actions">
+        <button id="run-wasm" type="button">WASM (CPU) で測定</button>
+        <button id="run-webgpu" type="button">WebGPU で測定</button>
+      </section>
+      <section id="status" class="status" role="status">ONNXモデルとprobe-tensors.jsonを選択してください。</section>
+      <pre id="output" class="output" aria-live="polite"></pre>
+      <footer>この測定はONNX encoderのみです。本文トークナイズと分類ヘッドの品質評価は共通ベンチで別集計します。</footer>
+    </main>
+  </body>
+</html>

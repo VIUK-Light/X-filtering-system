@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "SafeSearch 4 — X-filtering system",
+  "version": "0.1.0",
+  "description": "Local URL and page-text filtering with an explanation for each block.",
+  "permissions": ["storage", "declarativeNetRequest"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "SafeSearch 4 — filtering settings"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "css": ["hide-until-checked.css"],
+      "js": ["content-script.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked.html", "blocked.css", "blocked-page.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ]
+}

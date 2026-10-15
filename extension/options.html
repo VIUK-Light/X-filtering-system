@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SafeSearch 4 — サイトルール</title>
+    <link rel="stylesheet" href="options.css">
+    <script src="options.js" defer></script>
+  </head>
+  <body>
+    <main class="layout">
+      <header>
+        <p class="eyebrow">SafeSearch 4 · X-filtering system</p>
+        <h1>サイトルール</h1>
+        <p>この試作では、明示したホストルールと端末内の本文判定を使います。</p>
+      </header>
+      <form id="rule-form" class="panel">
+        <label for="host">ホスト名またはURL</label>
+        <input id="host" name="host" autocomplete="off" placeholder="example.invalid" required>
+        <div class="row">
+          <label for="action">動作</label>
+          <select id="action" name="action">
+            <option value="block">ブロック</option>
+            <option value="allow">許可</option>
+          </select>
+        </div>
+        <div class="row" id="category-field">
+          <label for="category">ブロックカテゴリ</label>
+          <select id="category" name="category"></select>
+        </div>
+        <button type="submit">ルールを追加</button>
+        <p id="form-message" class="message" role="status"></p>
+      </form>
+      <section class="panel" aria-labelledby="rules-heading">
+        <div class="section-heading">
+          <div>
+            <h2 id="rules-heading">登録済みルール</h2>
+            <p id="rule-count">読み込み中</p>
+          </div>
+        </div>
+        <ul id="rule-list" class="rule-list"></ul>
+      </section>
+      <aside class="notice">
+        <strong>プライバシー</strong>
+        <p>ページ本文はこの端末内で判定します。外部の分類APIには送信しません。</p>
+      </aside>
+    </main>
+  </body>
+</html>
