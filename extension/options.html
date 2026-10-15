@@ -9,56 +9,73 @@
   </head>
   <body>
     <main class="layout">
-      <header>
+      <header class="page-header">
         <p class="eyebrow">SafeSearch 4 · X-filtering system</p>
         <h1>フィルタ設定</h1>
         <p>カテゴリ別のURL・本文判定と、ホストごとの例外ルールを管理します。</p>
       </header>
-      <section class="panel" aria-labelledby="categories-heading">
+
+      <section class="panel category-panel" aria-labelledby="categories-heading">
         <div class="section-heading">
           <div>
             <h2 id="categories-heading">制限するカテゴリ</h2>
             <p>チェックしたカテゴリを、端末内のURL・本文判定でブロックします。</p>
           </div>
+          <p id="category-message" class="message" role="status">読み込み中</p>
         </div>
         <div class="category-actions">
           <button id="select-all-categories" class="secondary" type="button">全選択</button>
           <button id="select-no-categories" class="secondary" type="button">全解除</button>
         </div>
         <fieldset id="category-options" class="category-options" aria-label="有効にするカテゴリ"></fieldset>
-        <p id="category-message" class="message" role="status">読み込み中</p>
         <p class="category-note">ここで外したカテゴリは自動判定の対象外です。未検査・切り詰め状態はカテゴリ設定にかかわらず判定不能として停止し、登録済みのホスト許可・ブロックルールは引き続き優先されます。</p>
       </section>
-      <form id="rule-form" class="panel">
-        <label for="host">ホスト名またはURL</label>
-        <input id="host" name="host" autocomplete="off" placeholder="example.invalid" required>
-        <div class="row">
-          <label for="action">動作</label>
-          <select id="action" name="action">
-            <option value="block">ブロック</option>
-            <option value="allow">許可</option>
-          </select>
-        </div>
-        <div class="row" id="category-field">
-          <label for="category">ブロックカテゴリ</label>
-          <select id="category" name="category"></select>
-        </div>
-        <button type="submit">ルールを追加</button>
-        <p id="form-message" class="message" role="status"></p>
-      </form>
-      <section class="panel" aria-labelledby="rules-heading">
-        <div class="section-heading">
-          <div>
-            <h2 id="rules-heading">登録済みルール</h2>
-            <p id="rule-count">読み込み中</p>
+
+      <div class="management-grid">
+        <form id="rule-form" class="panel rule-panel">
+          <h2 class="panel-title">ホストごとの例外ルール</h2>
+          <div class="rule-fields">
+            <div class="field field-host">
+              <label for="host">ホスト名またはURL</label>
+              <input id="host" name="host" autocomplete="off" placeholder="example.invalid" required>
+            </div>
+            <div class="field">
+              <label for="action">動作</label>
+              <select id="action" name="action">
+                <option value="block">ブロック</option>
+                <option value="allow">許可</option>
+              </select>
+            </div>
+            <div class="field" id="category-field">
+              <label for="category">ブロックカテゴリ</label>
+              <select id="category" name="category"></select>
+            </div>
           </div>
-        </div>
-        <ul id="rule-list" class="rule-list"></ul>
-      </section>
+          <div class="form-footer">
+            <button type="submit">ルールを追加</button>
+            <p id="form-message" class="message" role="status"></p>
+          </div>
+        </form>
+
+        <section class="panel rules-panel" aria-labelledby="rules-heading">
+          <div class="section-heading">
+            <div>
+              <h2 id="rules-heading">登録済みルール</h2>
+              <p id="rule-count">読み込み中</p>
+            </div>
+          </div>
+          <ul id="rule-list" class="rule-list"></ul>
+        </section>
+      </div>
+
       <aside class="notice">
         <strong>プライバシー</strong>
         <p>ページ本文はこの端末内で判定します。外部の分類APIには送信しません。</p>
       </aside>
+
+      <footer class="site-footer">
+        <span>VIUK-Light 2026 · VIUK 2024-2026</span>
+      </footer>
     </main>
   </body>
 </html>
