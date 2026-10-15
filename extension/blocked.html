@@ -8,30 +8,21 @@
     <script src="blocked-page.js" defer></script>
   </head>
   <body>
-    <main class="card" aria-live="polite">
-      <div class="mark" aria-hidden="true">!</div>
-      <p class="eyebrow">SafeSearch 4 · X-filtering system</p>
-      <h1 id="heading">このページを表示できません</h1>
-      <p id="summary" class="summary">保護ルールによりページを止めました。</p>
-      <dl class="details">
-        <div>
-          <dt>判定</dt>
-          <dd id="decision">ブロック</dd>
-        </div>
-        <div id="category-row" hidden>
-          <dt>カテゴリ</dt>
-          <dd id="category"></dd>
-        </div>
-        <div>
-          <dt>理由</dt>
-          <dd id="reason"></dd>
-        </div>
-        <div id="uncertainty-row" hidden>
-          <dt>確認状況</dt>
-          <dd id="uncertainty"></dd>
-        </div>
-      </dl>
-      <p class="footer">本文判定はこの端末内で行われます。</p>
+    <main class="blocked-page" aria-live="polite" aria-labelledby="heading">
+      <p class="brand">SafeSearch 4</p>
+      <h1 id="heading">このページはブロックされました</h1>
+      <p id="summary" class="summary">ページの内容が制限対象に該当したため、表示できません。</p>
+
+      <div id="site-row" class="detail-row" hidden>
+        <span class="detail-label">対象サイト</span>
+        <span id="site-address" class="site-address"></span>
+      </div>
+      <div id="category-row" class="detail-row category-row" hidden>
+        <span class="detail-label">カテゴリ</span>
+        <span id="category" class="category-chip"></span>
+      </div>
+      <p id="uncertainty" class="uncertainty" hidden></p>
+
       <button id="back-button" type="button">前のページに戻る</button>
     </main>
   </body>

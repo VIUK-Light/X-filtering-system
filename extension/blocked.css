@@ -1,58 +1,129 @@
 :root {
   color-scheme: light dark;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f4f6fa;
-  color: #182235;
+  background: #ffffff;
+  color: #202833;
+  --muted: #657181;
+  --border: #e2e6eb;
+  --accent: #a32924;
+  --button: #26364a;
+  --focus-ring: #8bb8ed;
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 body {
+  display: grid;
+  min-width: 320px;
   min-height: 100vh;
+  min-height: 100svh;
+  place-items: center;
   margin: 0;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  background: radial-gradient(circle at top, #e8f0ff 0, #f4f6fa 45rem);
+  padding: 36px 24px;
 }
 
-.card {
-  width: min(100%, 620px);
-  padding: clamp(24px, 6vw, 48px);
-  border: 1px solid #d8e0ed;
-  border-radius: 24px;
-  background: #fff;
-  box-shadow: 0 24px 70px #1a2c4a1c;
+.blocked-page {
+  width: min(100%, 680px);
+  padding: 28px 0;
 }
 
-.mark {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
-  background: #fee4e2;
-  color: #b42318;
-  font-size: 26px;
-  font-weight: 800;
+.brand {
+  margin: 0 0 34px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: .01em;
 }
 
-.eyebrow { margin: 24px 0 8px; color: #52627a; font-size: 13px; font-weight: 700; letter-spacing: .04em; }
-h1 { margin: 0; font-size: clamp(25px, 5vw, 36px); line-height: 1.2; }
-.summary { margin: 16px 0 24px; color: #46556d; font-size: 16px; line-height: 1.7; }
-.details { margin: 0; border-top: 1px solid #e5eaf1; }
-.details > div { display: grid; grid-template-columns: 100px 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #e5eaf1; }
-dt { color: #64748b; font-size: 13px; }
-dd { margin: 0; overflow-wrap: anywhere; font-weight: 650; }
-.footer { margin: 20px 0; color: #64748b; font-size: 13px; }
-button { border: 0; border-radius: 12px; padding: 12px 18px; background: #174ea6; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
-button:hover { background: #103c82; }
+h1 {
+  margin: 0;
+  font-size: clamp(25px, 4vw, 32px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.3;
+}
+
+.summary {
+  margin: 13px 0 0;
+  color: #465466;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.detail-row {
+  display: flex;
+  align-items: baseline;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 20px;
+  min-height: 48px;
+  padding: 13px 0;
+  border-top: 1px solid var(--border);
+}
+
+.detail-row:first-of-type { margin-top: 26px; }
+.detail-row + .detail-row { border-top: 1px solid var(--border); }
+.detail-label {
+  min-width: 72px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.site-address {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  font-weight: 620;
+}
+.category-chip {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 680;
+}
+
+.uncertainty {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+button {
+  min-height: 42px;
+  margin-top: 24px;
+  padding: 10px 15px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--button);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 660;
+  cursor: pointer;
+}
+button:hover { background: #172536; }
+button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+
+@media (max-width: 480px) {
+  body { padding: 22px 18px; }
+  .blocked-page { padding: 18px 0; }
+  .brand { margin-bottom: 27px; }
+  .detail-row { gap: 12px; }
+  .detail-label { min-width: 62px; }
+}
 
 @media (prefers-color-scheme: dark) {
-  :root { background: #111827; color: #f1f5f9; }
-  body { background: radial-gradient(circle at top, #1b2b46 0, #111827 45rem); }
-  .card { border-color: #334155; background: #1e293b; box-shadow: 0 24px 70px #0005; }
-  .mark { background: #4c1d1d; color: #fecaca; }
-  .eyebrow, .summary, dt, .footer { color: #a8b4c7; }
-  .details, .details > div { border-color: #334155; }
+  :root {
+    background: #151a21;
+    color: #edf1f5;
+    --muted: #a2adba;
+    --border: #384452;
+    --accent: #f18a83;
+    --button: #d7e1ec;
+    --focus-ring: #91bdf0;
+  }
+  .summary { color: #bdc7d2; }
+  .category-chip { color: #ffaaa3; }
+  button { color: #172331; }
+  button:hover { background: #ffffff; }
 }
