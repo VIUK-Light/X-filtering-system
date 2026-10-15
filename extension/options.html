@@ -10,16 +10,19 @@
   <body>
     <main class="layout">
       <header class="page-header">
-        <p class="eyebrow">SafeSearch 4 · X-filtering system</p>
+        <div class="brand-row">
+          <img class="app-icon" src="icons/icon32.png" alt="" aria-hidden="true">
+          <span class="brand">SafeSearch 4</span>
+        </div>
         <h1>フィルタ設定</h1>
-        <p>カテゴリ別のURL・本文判定と、ホストごとの例外ルールを管理します。</p>
+        <p>カテゴリの制限と、サイトごとの例外を設定します。</p>
       </header>
 
-      <section class="panel category-panel" aria-labelledby="categories-heading">
+      <section class="category-panel" aria-labelledby="categories-heading">
         <div class="section-heading">
           <div>
             <h2 id="categories-heading">制限するカテゴリ</h2>
-            <p>チェックしたカテゴリを、端末内のURL・本文判定でブロックします。</p>
+            <p>選択したカテゴリに該当するページをブロックします。</p>
           </div>
           <p id="category-message" class="message" role="status">読み込み中</p>
         </div>
@@ -28,11 +31,11 @@
           <button id="select-no-categories" class="secondary" type="button">全解除</button>
         </div>
         <fieldset id="category-options" class="category-options" aria-label="有効にするカテゴリ"></fieldset>
-        <p class="category-note">ここで外したカテゴリは自動判定の対象外です。未検査・切り詰め状態はカテゴリ設定にかかわらず判定不能として停止し、登録済みのホスト許可・ブロックルールは引き続き優先されます。</p>
+        <p class="category-note">内容を確認できないページは表示を止めます。サイト別の許可・ブロックルールは優先されます。</p>
       </section>
 
       <div class="management-grid">
-        <form id="rule-form" class="panel rule-panel">
+        <form id="rule-form" class="rule-panel">
           <h2 class="panel-title">ホストごとの例外ルール</h2>
           <div class="rule-fields">
             <div class="field field-host">
@@ -57,7 +60,7 @@
           </div>
         </form>
 
-        <section class="panel rules-panel" aria-labelledby="rules-heading">
+        <section class="rules-panel" aria-labelledby="rules-heading">
           <div class="section-heading">
             <div>
               <h2 id="rules-heading">登録済みルール</h2>
@@ -68,10 +71,6 @@
         </section>
       </div>
 
-      <aside class="notice">
-        <strong>プライバシー</strong>
-        <p>ページ本文はこの端末内で判定します。外部の分類APIには送信しません。</p>
-      </aside>
 
       <footer class="site-footer">
         <span>VIUK-Light 2026 · VIUK 2024-2026</span>

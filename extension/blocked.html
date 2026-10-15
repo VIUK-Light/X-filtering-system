@@ -9,18 +9,16 @@
   </head>
   <body>
     <main class="blocked-page" aria-live="polite" aria-labelledby="heading">
-      <p class="brand">SafeSearch 4</p>
-      <div class="intro">
-        <img class="illustration" src="assets/blocked-page-illustration.png" alt="" aria-hidden="true">
-        <div class="intro-copy">
-          <h1 id="heading">このページはブロックされました</h1>
-          <p id="summary" class="summary">ページの内容が制限対象に該当したため、表示できません。</p>
-        </div>
+      <div class="brand-row">
+        <img class="app-icon" src="icons/icon48.png" alt="" aria-hidden="true">
+        <p class="brand">SafeSearch 4</p>
       </div>
+      <h1 id="heading">このページはブロックされました</h1>
+      <p id="summary" class="summary">ページの内容が制限対象に該当したため、表示できません。</p>
 
       <div id="site-row" class="detail-row" hidden>
-        <span class="detail-label">対象サイト</span>
-        <span id="site-address" class="site-address"></span>
+        <span class="detail-label">対象URL</span>
+        <span id="site-url" class="site-address"></span>
       </div>
       <div id="category-row" class="detail-row category-row" hidden>
         <span class="detail-label">カテゴリ</span>

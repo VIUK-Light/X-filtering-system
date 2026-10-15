@@ -28,29 +28,28 @@ body {
   padding: 28px 0;
 }
 
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 0 28px;
+}
+
+.app-icon {
+  display: block;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 9px;
+}
+
 .brand {
-  margin: 0 0 26px;
+  margin: 0;
   color: var(--muted);
   font-size: 13px;
   font-weight: 650;
   letter-spacing: .01em;
 }
-
-.intro {
-  display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  align-items: center;
-  gap: 24px;
-}
-
-.illustration {
-  display: block;
-  width: 112px;
-  height: 112px;
-  object-fit: contain;
-}
-
-.intro-copy { min-width: 0; }
 
 h1 {
   margin: 0;
@@ -88,6 +87,7 @@ h1 {
 .site-address {
   min-width: 0;
   overflow-wrap: anywhere;
+  word-break: break-word;
   font-size: 13px;
   font-weight: 620;
 }
@@ -123,9 +123,8 @@ button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px
 @media (max-width: 480px) {
   body { padding: 22px 18px; }
   .blocked-page { padding: 18px 0; }
-  .brand { margin-bottom: 22px; }
-  .intro { grid-template-columns: 76px minmax(0, 1fr); align-items: start; gap: 14px; }
-  .illustration { width: 76px; height: 76px; }
+  .brand-row { margin-bottom: 22px; }
+  .app-icon { width: 36px; height: 36px; }
   .detail-row { gap: 12px; }
   .detail-label { min-width: 62px; }
 }

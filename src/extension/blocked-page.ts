@@ -55,7 +55,7 @@ function renderPage(): void {
   const url = params.get("url");
   if (url) {
     try {
-      showOptional("site-row", "site-address", new URL(url).host);
+      showOptional("site-row", "site-url", new URL(url).href);
     } catch {
       setText("summary", "ページを確認できなかったため、表示を止めました。");
     }
