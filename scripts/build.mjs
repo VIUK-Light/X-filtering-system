@@ -9,9 +9,9 @@ const outputDir = path.join(projectRoot, "dist", "edge");
 
 await rm(outputDir, { recursive: true, force: true });
 await mkdir(outputDir, { recursive: true });
-console.log("Copying Edge static files...");
+console.log("Copying Chromium extension static files...");
 await cp(path.join(projectRoot, "extension"), outputDir, { recursive: true });
-console.log("Bundling Edge extension scripts...");
+console.log("Bundling Chromium extension scripts...");
 
 const entries = [
   ["service-worker", "src/extension/service-worker.ts", "esm"],
@@ -37,4 +37,4 @@ for (const [name, entry, format] of entries) {
   console.log(`Bundled ${name}.`);
 }
 
-console.log(`Built unpacked Edge extension in ${path.relative(projectRoot, outputDir)}`);
+console.log(`Built unpacked Chromium extension in ${path.relative(projectRoot, outputDir)}`);
