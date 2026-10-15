@@ -39,7 +39,7 @@ The ZIP files are written to `release/`. See [extension distribution](docs/distr
 
 Microsoft Edge's supported-API table lists `declarativeNetRequest` for macOS and Windows. The content script runs at `document_start`, before the page DOM is constructed. Edge Add-ons and Chrome Web Store both accept ZIP packages, which this repository builds under `release/`. Store submissions still require listing metadata and assets.
 
-The extension reads the current URL, title, and readable main-frame text on HTTP/HTTPS pages. It stores only the site rules a parent enters in `chrome.storage.local`; this prototype does not transmit page content or URLs to a classification service. The wide host permission is required for automatic filtering on pages the user visits. Store privacy disclosures must accurately describe this access and the local-only processing.
+The extension reads the current URL, title, and readable main-frame text on HTTP/HTTPS pages. It stores only the site rules a parent enters in `chrome.storage.local`; this prototype does not transmit page content or URLs to a classification service. The wide host permission is required for automatic filtering on pages the user visits. Store privacy disclosures must accurately describe this access and the local-only processing. See the [privacy policy](docs/privacy-policy.md).
 
 References: [Edge API support](https://learn.microsoft.com/en-us/microsoft-edge/extensions/developer-guide/api-support), [content scripts and `document_start`](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts), and [extension distribution](docs/distribution.md).
 
