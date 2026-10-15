@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "SafeSearch 4 — X-filtering system",
+  "name": "__MSG_extensionName__",
   "version": "0.1.0",
-  "description": "Local URL and page-text filtering with an explanation for each block.",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "ja",
   "permissions": [
     "storage",
     "declarativeNetRequest"
@@ -16,7 +17,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "SafeSearch 4 — 設定を開く",
+    "default_title": "__MSG_actionDefaultTitle__",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png"

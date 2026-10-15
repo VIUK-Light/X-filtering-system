@@ -30,7 +30,7 @@ npm run package:chrome
 - Edge Add-ons: `release/x-filtering-system-edge-<version>.zip`
 - Chrome Web Store: `release/x-filtering-system-chrome-<version>.zip`
 
-現行バージョンは `0.1.0` です。ZIP名のバージョンはビルド済み `manifest.json` から自動で取得するため、更新時は拡張マニフェストの `version` を上げて作り直します。両方とも同一のChromium向けビルドで、ZIPのルートに `manifest.json` と拡張の必要ファイルが入ります。ビルドは `chrome120` をターゲットにしています。Chromeでの実動作を確認してからストア提出してください。
+現行バージョンは `0.1.0` です。ZIP名のバージョンはビルド済み `manifest.json` から自動で取得するため、更新時は拡張マニフェストの `version` を上げて作り直します。両方とも同一のChromium向けビルドで、ZIPのルートに `manifest.json` と拡張の必要ファイルが入ります。既定言語は日本語（`default_locale: ja`）で、対応する文字列を `_locales/ja/messages.json` に含めています。ビルドは `chrome120` をターゲットにしています。Chromeでの実動作を確認してからストア提出してください。
 
 ## 3. Microsoft Edge Add-onsへ提出
 

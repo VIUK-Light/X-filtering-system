@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "SafeSearch 4 — X-filtering system"
+  },
+  "extensionDescription": {
+    "message": "URLとページの文字情報を確認し、制限対象を検出したときにカテゴリと理由を表示します。"
+  },
+  "actionDefaultTitle": {
+    "message": "SafeSearch 4 — 設定を開く"
+  }
+}
