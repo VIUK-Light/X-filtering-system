@@ -10,7 +10,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "SafeSearch 4 — filtering settings"
+    "default_title": "SafeSearch 4 — 設定を開く"
   },
   "options_ui": {
     "page": "options.html",

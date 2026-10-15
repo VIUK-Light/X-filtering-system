@@ -38,6 +38,10 @@ function reportRuleError(error: unknown): void {
   console.error("SafeSearch 4 could not update local URL rules.", error);
 }
 
+function reportOptionsPageError(error: unknown): void {
+  console.error("SafeSearch 4 could not open settings.", error);
+}
+
 chrome.runtime.onInstalled.addListener(() => {
   void refreshDNRRules().catch(reportRuleError);
 });
@@ -50,4 +54,8 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local" && SITE_RULES_KEY in changes) {
     void refreshDNRRules().catch(reportRuleError);
   }
+});
+
+chrome.action.onClicked.addListener(() => {
+  void chrome.runtime.openOptionsPage().catch(reportOptionsPageError);
 });
