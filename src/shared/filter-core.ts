@@ -38,6 +38,7 @@ export interface FilterResult {
     | "site_rule_block"
     | "site_rule_allow"
     | "content_category_match"
+    | "category_disabled"
     | "risky_tld_match"
     | "suspicious_redirect_match"
     | "content_no_match"
@@ -57,6 +58,8 @@ export interface SiteRule {
 
 export interface EvaluateOptions {
   siteRules?: readonly SiteRule[];
+  /** Missing means the backwards-compatible default: all MVP categories enabled. */
+  enabledCategories?: readonly FilterCategoryId[];
   strictMode?: boolean;
 }
 
@@ -586,6 +589,7 @@ function detectContentBlock(
   text: string,
   url: string,
   strictMode: boolean,
+  enabledCategories?: ReadonlySet<FilterCategoryId>,
 ): { categoryId: FilterCategoryId; reasonCode: FilterResult["reasonCode"]; keywords: string[] } | null {
   const textSnippet = text.slice(0, 1200);
   // Preserve search-result pages by URL. Authentication words often appear in
@@ -594,6 +598,7 @@ function detectContentBlock(
   const technicalContext = isTechnicalOrLearningContext(textSnippet, url);
 
   for (const category of DANGEROUS_PATTERNS) {
+    if (enabledCategories && !enabledCategories.has(category.categoryId)) continue;
     const terms = category.terms;
     const urlMatches = terms.filter((term) => url.includes(term.toLowerCase()));
     const textMatches = terms.filter((term) => textSnippet.includes(term.toLowerCase()));
@@ -616,14 +621,23 @@ function detectContentBlock(
     const downloadHits = SUSPICIOUS_URL_FRAGMENTS.filter((fragment) =>
       fragment.startsWith(".") ? url.endsWith(fragment) : url.includes(fragment),
     );
-    if (!technicalContext && downloadHits.length > 0) {
+    if (
+      (!enabledCategories || enabledCategories.has("suspicious_redirect")) &&
+      !technicalContext &&
+      downloadHits.length > 0
+    ) {
       return {
         categoryId: "suspicious_redirect",
         reasonCode: "suspicious_redirect_match",
         keywords: [...downloadHits],
       };
     }
-    if (!technicalContext && url.endsWith(".zip") && url.includes("redirect")) {
+    if (
+      (!enabledCategories || enabledCategories.has("suspicious_redirect")) &&
+      !technicalContext &&
+      url.endsWith(".zip") &&
+      url.includes("redirect")
+    ) {
       return {
         categoryId: "suspicious_redirect",
         reasonCode: "suspicious_redirect_match",
@@ -633,6 +647,7 @@ function detectContentBlock(
   }
 
   for (const pair of MIXED_RISK_PAIRS) {
+    if (enabledCategories && !enabledCategories.has(pair.categoryId)) continue;
     const leftHits = pair.leftWords.filter((word) => textSnippet.includes(word.toLowerCase()) || url.includes(word.toLowerCase()));
     const rightHits = pair.rightWords.filter((word) => textSnippet.includes(word.toLowerCase()) || url.includes(word.toLowerCase()));
     if (leftHits.length === 0 || rightHits.length === 0) continue;
@@ -654,11 +669,14 @@ function detectContentBlock(
       const categoryId: FilterCategoryId = tldHits.some((tld) => tld === ".bet" || tld === ".casino")
         ? "gambling"
         : "adult_content";
-      return { categoryId, reasonCode: "risky_tld_match", keywords: [...tldHits] };
+      if (!enabledCategories || enabledCategories.has(categoryId)) {
+        return { categoryId, reasonCode: "risky_tld_match", keywords: [...tldHits] };
+      }
     }
   }
 
   for (const category of DANGEROUS_PATTERNS) {
+    if (enabledCategories && !enabledCategories.has(category.categoryId)) continue;
     const urlMatches = category.terms.filter((term) => url.includes(term.toLowerCase()));
     if (urlMatches.length < 2) continue;
     if (shouldSuppressQuickHit(category.categoryId, urlMatches, textSnippet, url, technicalContext)) continue;
@@ -708,7 +726,12 @@ export function evaluatePage(
     );
   }
 
-  const block = detectContentBlock(text, input.url.toLowerCase(), options.strictMode ?? false);
+  const normalizedURL = input.url.toLowerCase();
+  const strictMode = options.strictMode ?? false;
+  const enabledCategories = options.enabledCategories === undefined
+    ? undefined
+    : new Set(options.enabledCategories);
+  const block = detectContentBlock(text, normalizedURL, strictMode, enabledCategories);
   if (block) {
     return result(
       "block",
@@ -718,6 +741,26 @@ export function evaluatePage(
       [block.categoryId],
       block.keywords,
     );
+  }
+
+  if (enabledCategories) {
+    // If a disabled category matched but no enabled category did, report the
+    // skipped candidate separately. Partial or uninspectable pages still fail
+    // closed because unobserved text may contain an enabled category.
+    const disabledBlock = detectContentBlock(text, normalizedURL, strictMode);
+    if (disabledBlock) {
+      if (uncertainty) {
+        return result("indeterminate", "runtime", "content_incomplete", input);
+      }
+      return result(
+        "allow",
+        "content",
+        "category_disabled",
+        input,
+        [disabledBlock.categoryId],
+        disabledBlock.keywords,
+      );
+    }
   }
 
   if (uncertainty) {

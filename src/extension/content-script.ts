@@ -1,22 +1,40 @@
 import {
+  MVP_CATEGORIES,
   evaluatePage,
+  type FilterCategoryId,
   type FilterInput,
   type FilterResult,
   type SiteRule,
 } from "../shared/filter-core.ts";
 
 const SITE_RULES_KEY = "xfilter.siteRules";
+const ENABLED_CATEGORIES_KEY = "xfilter.enabledCategories";
 const MAX_PAGE_TEXT = 30_000;
 
-async function loadSiteRules(): Promise<SiteRule[]> {
-  const stored = await chrome.storage.local.get(SITE_RULES_KEY);
-  const value: unknown = stored[SITE_RULES_KEY];
-  if (!Array.isArray(value)) return [];
-  return value.filter((entry): entry is SiteRule => {
+interface LocalFilterSettings {
+  siteRules: SiteRule[];
+  enabledCategories?: FilterCategoryId[];
+}
+
+function isFilterCategoryId(value: unknown): value is FilterCategoryId {
+  return MVP_CATEGORIES.some((category) => category.id === value);
+}
+
+async function loadLocalFilterSettings(): Promise<LocalFilterSettings> {
+  const stored = await chrome.storage.local.get([SITE_RULES_KEY, ENABLED_CATEGORIES_KEY]);
+  const rulesValue: unknown = stored[SITE_RULES_KEY];
+  const siteRules = Array.isArray(rulesValue)
+    ? rulesValue.filter((entry): entry is SiteRule => {
     if (typeof entry !== "object" || entry === null) return false;
     const rule = entry as Partial<SiteRule>;
     return typeof rule.host === "string" && (rule.action === "allow" || rule.action === "block");
-  });
+      })
+    : [];
+
+  const categoriesValue: unknown = stored[ENABLED_CATEGORIES_KEY];
+  if (!Array.isArray(categoriesValue)) return { siteRules };
+  if (!categoriesValue.every(isFilterCategoryId)) return { siteRules };
+  return { siteRules, enabledCategories: categoriesValue };
 }
 
 function makeInput(): FilterInput {
@@ -58,8 +76,8 @@ async function inspectPage(): Promise<void> {
 
   try {
     const input = makeInput();
-    const siteRules = await loadSiteRules();
-    const result = evaluatePage(input, { siteRules });
+    const settings = await loadLocalFilterSettings();
+    const result = evaluatePage(input, settings);
     if (result.decision !== "allow") {
       location.replace(blockedPageURL(result, input));
       return;

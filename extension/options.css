@@ -13,6 +13,14 @@ input, select { min-height: 44px; width: 100%; border: 1px solid #cbd5e1; border
 .row { margin-top: 16px; }
 button { margin-top: 20px; border: 0; border-radius: 10px; padding: 12px 16px; background: #174ea6; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
 button:hover { background: #103c82; }
+.category-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.category-actions button { margin: 0; padding: 9px 12px; background: #eef2f7; color: #263449; font-size: 13px; }
+.category-actions button:hover { background: #dce5f1; }
+.category-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 16px 0 0; padding: 0; border: 0; }
+.category-option { display: flex; align-items: center; gap: 10px; min-height: 48px; margin: 0; padding: 11px 13px; border: 1px solid #e2e8f0; border-radius: 12px; cursor: pointer; }
+.category-option input { width: 18px; min-height: 18px; height: 18px; margin: 0; padding: 0; flex: 0 0 auto; accent-color: #174ea6; }
+.category-option span { line-height: 1.35; }
+.category-note { margin: 8px 0 0; color: #64748b; font-size: 13px; line-height: 1.55; }
 .message { min-height: 1.3em; margin-bottom: 0; color: #52627a; font-size: 13px; }
 .section-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
 .section-heading p { margin: 6px 0 0; font-size: 13px; }
@@ -30,6 +38,10 @@ button:hover { background: #103c82; }
   .eyebrow, header > p:last-child, .section-heading p, .rule-meta, .empty, .message { color: #a8b4c7; }
   .panel { border-color: #334155; background: #1e293b; box-shadow: 0 10px 30px #0003; }
   input, select { border-color: #475569; }
+  .category-option { border-color: #334155; }
+  .category-actions button { background: #334155; color: #f1f5f9; }
+  .category-actions button:hover { background: #475569; }
+  .category-note { color: #a8b4c7; }
   .rule { border-color: #334155; }
   .rule button { background: #334155; color: #f1f5f9; }
   .notice { background: #20334e; color: #e6eefb; }

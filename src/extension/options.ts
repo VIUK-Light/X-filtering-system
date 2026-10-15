@@ -1,6 +1,12 @@
-import { MVP_CATEGORIES, normalizeHost, type SiteRule } from "../shared/filter-core.ts";
+import {
+  MVP_CATEGORIES,
+  normalizeHost,
+  type FilterCategoryId,
+  type SiteRule,
+} from "../shared/filter-core.ts";
 
 const SITE_RULES_KEY = "xfilter.siteRules";
+const ENABLED_CATEGORIES_KEY = "xfilter.enabledCategories";
 const form = document.getElementById("rule-form") as HTMLFormElement;
 const hostField = document.getElementById("host") as HTMLInputElement;
 const actionField = document.getElementById("action") as HTMLSelectElement;
@@ -9,6 +15,90 @@ const categoryContainer = document.getElementById("category-field") as HTMLDivEl
 const message = document.getElementById("form-message") as HTMLParagraphElement;
 const list = document.getElementById("rule-list") as HTMLUListElement;
 const count = document.getElementById("rule-count") as HTMLParagraphElement;
+const categoryOptions = document.getElementById("category-options") as HTMLFieldSetElement;
+const categoryMessage = document.getElementById("category-message") as HTMLParagraphElement;
+const selectAllCategoriesButton = document.getElementById("select-all-categories") as HTMLButtonElement;
+const selectNoCategoriesButton = document.getElementById("select-no-categories") as HTMLButtonElement;
+const categoryCheckboxes = new Map<FilterCategoryId, HTMLInputElement>();
+
+function isFilterCategoryId(value: unknown): value is FilterCategoryId {
+  return MVP_CATEGORIES.some((category) => category.id === value);
+}
+
+async function loadEnabledCategories(): Promise<Set<FilterCategoryId>> {
+  const stored = await chrome.storage.local.get(ENABLED_CATEGORIES_KEY);
+  const value: unknown = stored[ENABLED_CATEGORIES_KEY];
+  if (!Array.isArray(value)) return new Set(MVP_CATEGORIES.map((category) => category.id));
+
+  const validCategories = value.filter(isFilterCategoryId);
+  if (validCategories.length !== value.length) {
+    return new Set(MVP_CATEGORIES.map((category) => category.id));
+  }
+  return new Set(validCategories);
+}
+
+function renderCategoryOptions(enabled: ReadonlySet<FilterCategoryId>): void {
+  categoryOptions.replaceChildren();
+  categoryCheckboxes.clear();
+
+  for (const category of MVP_CATEGORIES) {
+    const label = document.createElement("label");
+    label.className = "category-option";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = category.id;
+    checkbox.checked = enabled.has(category.id);
+    checkbox.addEventListener("change", () => void saveEnabledCategories());
+
+    const title = document.createElement("span");
+    title.textContent = category.title;
+    label.append(checkbox, title);
+    categoryOptions.append(label);
+    categoryCheckboxes.set(category.id, checkbox);
+  }
+}
+
+function selectedCategories(): FilterCategoryId[] {
+  return MVP_CATEGORIES
+    .filter((category) => categoryCheckboxes.get(category.id)?.checked)
+    .map((category) => category.id);
+}
+
+async function saveEnabledCategories(): Promise<void> {
+  const enabledCategories = selectedCategories();
+  categoryMessage.textContent = "保存中…";
+  try {
+    await chrome.storage.local.set({ [ENABLED_CATEGORIES_KEY]: enabledCategories });
+    categoryMessage.textContent = `${enabledCategories.length} 件のカテゴリを有効にしました。`;
+  } catch (error: unknown) {
+    console.error("Could not save enabled categories.", error);
+    categoryMessage.textContent = "カテゴリ設定を保存できませんでした。もう一度お試しください。";
+  }
+}
+
+selectAllCategoriesButton.disabled = true;
+selectNoCategoriesButton.disabled = true;
+void loadEnabledCategories()
+  .then((enabled) => {
+    renderCategoryOptions(enabled);
+    selectAllCategoriesButton.disabled = false;
+    selectNoCategoriesButton.disabled = false;
+    categoryMessage.textContent = `${enabled.size} 件のカテゴリが有効です。`;
+  })
+  .catch((error: unknown) => {
+    console.error("Could not load enabled categories.", error);
+    categoryMessage.textContent = "カテゴリ設定を読み込めませんでした。";
+  });
+
+selectAllCategoriesButton.addEventListener("click", () => {
+  for (const checkbox of categoryCheckboxes.values()) checkbox.checked = true;
+  void saveEnabledCategories();
+});
+
+selectNoCategoriesButton.addEventListener("click", () => {
+  for (const checkbox of categoryCheckboxes.values()) checkbox.checked = false;
+  void saveEnabledCategories();
+});
 
 for (const category of MVP_CATEGORIES) {
   const option = document.createElement("option");

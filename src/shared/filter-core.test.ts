@@ -73,6 +73,66 @@ test("URL and body keyword hits return a category block", () => {
   assert.deepEqual(urlResult.categories, ["adult_content"]);
 });
 
+test("disabled categories allow their content candidates while reporting the skipped category", () => {
+  const result = evaluatePage(
+    page({ bodyText: "adult porn xxx nude video" }),
+    { enabledCategories: ["violence"] },
+  );
+
+  assert.equal(result.decision, "allow");
+  assert.equal(result.stage, "content");
+  assert.equal(result.reasonCode, "category_disabled");
+  assert.deepEqual(result.categories, ["adult_content"]);
+});
+
+test("an enabled category still blocks when a disabled category appears earlier", () => {
+  const result = evaluatePage(
+    page({ bodyText: "adult porn xxx nude video 暴力 殺人 グロ 死体" }),
+    { enabledCategories: ["violence"] },
+  );
+
+  assert.equal(result.decision, "block");
+  assert.equal(result.reasonCode, "content_category_match");
+  assert.deepEqual(result.categories, ["violence"]);
+});
+
+test("explicit site rules take precedence over category toggles", () => {
+  const blocked = evaluatePage(
+    page({ url: "https://blocked.example.invalid/page" }),
+    {
+      enabledCategories: ["violence"],
+      siteRules: [{ host: "example.invalid", action: "block", categoryId: "adult_content" }],
+    },
+  );
+  const allowed = evaluatePage(
+    page({ url: "https://docs.example.invalid/guide" }),
+    {
+      enabledCategories: [],
+      siteRules: [
+        { host: "example.invalid", action: "block", categoryId: "violence" },
+        { host: "docs.example.invalid", action: "allow" },
+      ],
+    },
+  );
+
+  assert.equal(blocked.decision, "block");
+  assert.deepEqual(blocked.categories, ["adult_content"]);
+  assert.equal(allowed.decision, "allow");
+  assert.equal(allowed.reasonCode, "site_rule_allow");
+});
+
+test("a disabled-category match remains indeterminate when inspection is incomplete", () => {
+  const result = evaluatePage(
+    page({ bodyText: "adult porn xxx nude video", isTruncated: true }),
+    { enabledCategories: ["violence"] },
+  );
+
+  assert.equal(result.decision, "indeterminate");
+  assert.equal(result.reasonCode, "content_incomplete");
+  assert.equal(result.uncertainty, "truncated");
+  assert.deepEqual(result.categories, []);
+});
+
 test("known search-result URLs suppress lexical category hits", () => {
   const result = evaluatePage(page({
     url: "https://www.google.com/search?q=porn",

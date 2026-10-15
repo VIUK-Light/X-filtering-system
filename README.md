@@ -6,6 +6,7 @@ SafeSearch 4 is the next generation of SafeKids Search 3. This repository starts
 
 - A shared TypeScript core that returns an allow, block, or indeterminate result with a stage, category IDs, and a reason code.
 - An Edge extension that applies explicit site rules before top-level navigation, checks page text locally, and displays a reason and category on its block page.
+- Parent settings to enable or disable automatic filtering by supported category; all MVP categories start enabled.
 - No page text is sent to Google Safe Browsing, TextRazor, or another remote classification service. Those integrations are intentionally outside the local decision path.
 
 The first release is a prototype. Its local weighted-token rules are a small port of VIUK-One's offline filtering behavior; they are not a claim of coverage equivalent to the full iOS app or to SafeSearch 4's E5 model.
@@ -20,6 +21,8 @@ npm run build
 ```
 
 Load the unpacked extension in Microsoft Edge by opening `edge://extensions`, enabling Developer mode, and selecting `dist/edge` with **Load unpacked**. Open the extension's options page to add a blocked or allowed host rule. A reserved `.invalid` host can be used for a local navigation smoke test without contacting a real website. The small local browser fixtures are in `test-fixtures/browser/`.
+
+In the options page, **制限するカテゴリ** controls the automatic URL/body category checks. All categories are enabled by default. Explicit per-host allow/block rules remain separate and take precedence over those category toggles.
 
 The content script analyzes readable main-frame text. A page with visible text and ordinary images is still evaluated from its readable text; a media-only page with no inspectable text is indeterminate and fails closed with a separate reason. Iframes and image pixels are not classified by this MVP.
 
@@ -46,7 +49,7 @@ References: [Edge API support](https://learn.microsoft.com/en-us/microsoft-edge/
 - `decision`: `allow`, `block`, or `indeterminate`
 - `stage`: `url`, `content`, or `runtime`
 - `categories`: stable category IDs, empty when no category can be attributed
-- `reasonCode`: stable machine-readable cause
+- `reasonCode`: stable machine-readable cause, including `category_disabled` when a matched category is disabled in parent settings
 - `uncertainty`: an optional note such as `truncated` or `uninspectable`, kept separate from a category block
 
 Both the browser integration and runtime-comparison fixtures use this contract. A page that cannot be inspected is shown as indeterminate with a reason; it is not reported as a category match.
